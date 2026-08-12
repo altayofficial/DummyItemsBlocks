@@ -666,7 +666,7 @@ final class Main extends PluginBase
     public static function registerItems(array $items): void
     {
         foreach ($items as $id) {
-            self::registerSimpleItem($id, new DummyItem(new ItemIdentifier(ItemTypeIds::newId()), Utils::generateNameFromId($id)), [$id], $id !== ItemTypeNames::FILLED_MAP);
+            self::registerSimpleItem($id, new DummyItem(new ItemIdentifier(ItemTypeIds::newId()), Utils::generateNameFromId($id)), [$id]);
         }
     }
 
@@ -754,7 +754,6 @@ final class Main extends PluginBase
             // For some reason it disappears from client-side creative inventory if I do registerBlocks() first... why Mojang...?
             foreach (PotionType::cases() as $type) {
                 $potion = (clone $item)->setType($type);
-                CreativeInventory::getInstance()->add($potion);
                 $name = explode(':', $id);
                 StringToItemParser::getInstance()->register($name[0] . ':' . $type->name . '_' . $name[1], fn() => clone $potion);
             }
@@ -775,16 +774,10 @@ final class Main extends PluginBase
             StringToItemParser::getInstance()->register($id, fn() => clone $item);
             foreach (GoatHornType::cases() as $type) {
                 $horn = (clone $item)->setType($type);
-                CreativeInventory::getInstance()->add($horn);
                 $name = explode(':', $id);
                 StringToItemParser::getInstance()->register($name[0] . ':' . $type->name . '_' . $name[1], fn() => clone $horn);
             }
         }
-        // im too lazy to list all the items with compound tag data, easier to just reload ;P
-        $creativeItems = CraftingManagerFromDataHelper::loadJsonArrayOfObjectsFile(
-            BedrockDataFiles::CREATIVEITEMS_JSON,
-            ItemStackData::class
-        );
         // bare minimum code needed for non-functional item adapted from https://github.com/pmmp/PocketMine-MP/pull/5455
         // obsolete when merged
         $id = ItemTypeNames::FIREWORK_STAR;
@@ -799,27 +792,11 @@ final class Main extends PluginBase
                 fn(FireworkStar $item) => DyeColorIdMap::getInstance()->toInvertedId($item->getExplosion()->getFlashColor())
             );
             StringToItemParser::getInstance()->register($id, fn() => clone $item);
-            foreach ($creativeItems as $data) {
-                if ($data->name === $id) {
-                    $item = CraftingManagerFromDataHelper::deserializeItemStack($data);
-                    if ($item) {
-                        CreativeInventory::getInstance()->add($item);
-                    }
-                }
-            }
         }
         $id = ItemTypeNames::FIREWORK_ROCKET;
         if (Utils::removeIfPresent($id, $items)) {
             $item = new DummyItem(new ItemIdentifier(ItemTypeIds::newId()), Utils::generateNameFromId($id));
-            self::registerSimpleItem($id, $item, [$id], false);
-            foreach ($creativeItems as $data) {
-                if ($data->name === $id) {
-                    $item = CraftingManagerFromDataHelper::deserializeItemStack($data);
-                    if ($item) {
-                        CreativeInventory::getInstance()->add($item);
-                    }
-                }
-            }
+            self::registerSimpleItem($id, $item, [$id]);
         }
     }
 
@@ -841,13 +818,12 @@ final class Main extends PluginBase
                 return;
             }
         }
-        CreativeInventory::getInstance()->add($block->asItem());
     }
 
     /**
      * @param string[] $stringToItemParserNames
      */
-    private static function registerSimpleItem(string $id, Item $item, array $stringToItemParserNames, bool $addToCreative = true): void
+    private static function registerSimpleItem(string $id, Item $item, array $stringToItemParserNames): void
     {
         GlobalItemDataHandlers::getDeserializer()->map($id, fn() => clone $item);
         GlobalItemDataHandlers::getSerializer()->map($item, fn() => new SavedItemData($id));
@@ -859,9 +835,6 @@ final class Main extends PluginBase
                 var_dump("Item already registered: $name"); // is there a way to debug log this? Must support both async and sync
                 return;
             }
-        }
-        if ($addToCreative) {
-            CreativeInventory::getInstance()->add($item);
         }
     }
 

@@ -80,7 +80,6 @@ use pocketmine\data\bedrock\block\convert\BlockStateDeserializerHelper;
 use pocketmine\data\bedrock\block\convert\BlockStateReader as Reader;
 use pocketmine\data\bedrock\block\convert\BlockStateSerializerHelper;
 use pocketmine\data\bedrock\block\convert\BlockStateWriter as Writer;
-use pocketmine\inventory\CreativeInventory;
 use pocketmine\item\StringToItemParser;
 use pocketmine\utils\AssumptionFailedError;
 use pocketmine\world\format\io\GlobalBlockStateHandlers;
@@ -95,17 +94,13 @@ final class BlockStateRegistration
     /**
      * @param Block $block
      * @param string[] $stringToItemParserNames
-     * @param bool $addToCreative
      * @return void
      */
-    private static function register(Block $block, array $stringToItemParserNames, bool $addToCreative = true): void
+    private static function register(Block $block, array $stringToItemParserNames): void
     {
         RuntimeBlockStateRegistry::getInstance()->register($block);
         foreach ($stringToItemParserNames as $name) {
             StringToItemParser::getInstance()->registerBlock($name, fn() => clone $block);
-        }
-        if ($addToCreative) {
-            CreativeInventory::getInstance()->add($block->asItem());
         }
     }
 

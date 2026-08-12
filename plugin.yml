@@ -1,11 +1,11 @@
 name: DummyItemsBlocks
 main: diamondgold\DummyItemsBlocks\Main
-description: Registers (non-functional) items and blocks
+description: Registers (non-functional) items and blocks for Altay
 version: 1.1.0-dev
-api: 5.13.0
+api: 5.44.0
 load: STARTUP
 author: diamond-gold (ace)
-website: https://github.com/diamond-gold/DummyItemsBlocks
+website: https://github.com/Altay-Bundle/DummyItemsBlocks
 permissions:
     dummyitemsblocks.changestate:
         description: Allows changing of state by right-clicking
