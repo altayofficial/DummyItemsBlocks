@@ -1,4 +1,4 @@
-![DummyItemsBlocks](https://socialify.git.ci/Altay-Bundle/DummyItemsBlocks/image?description=1&font=Inter&forks=1&issues=1&logo=https%3A%2F%2Fgithub.com%2Fdiamond-gold%2FDummyItemsBlocks%2Fraw%2Fmain%2Ficon.gif&name=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Light)
+![DummyItemsBlocks](https://socialify.git.ci/altayofficial/DummyItemsBlocks/image?description=1&font=Inter&forks=1&issues=1&logo=https%3A%2F%2Fgithub.com%2Fdiamond-gold%2FDummyItemsBlocks%2Fraw%2Fmain%2Ficon.gif&name=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Light)
 
 > Items and blocks added are not functional, they are just for decoration purposes.
 > 
